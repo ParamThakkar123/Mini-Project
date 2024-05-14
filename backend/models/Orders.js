@@ -13,6 +13,10 @@ const ItemSchema = mongoose.Schema({
         type:String,
         required:true
     },
+    itemimageurl:{
+        type: String,
+        required: true
+    }
 })
 
 const ItemModel = mongoose.model('item', ItemSchema);

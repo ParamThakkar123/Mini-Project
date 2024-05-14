@@ -1,21 +1,29 @@
 import React, { useState } from "react";
+import { imageDb } from "../../../firebase";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 } from "uuid";
 
 const AddItem = () => {
   const [itemName, setItemName] = useState("");
   const [itemPrice, setItemPrice] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [error, setError] = useState("");
+  const [image, setImage] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check if any required field is empty
     if (!itemName || !itemPrice || !itemDescription) {
       setError("Please fill in all required fields.");
       return;
     }
 
     try {
+      const imageRef = ref(imageDb, `files/${v4()}`);
+      await uploadBytes(imageRef, image);
+      const downloadURL = await getDownloadURL(imageRef);
+      setImageUrl(downloadURL);
+
       const response = await fetch("http://localhost:5000/addItem", {
         method: "POST",
         headers: {
@@ -25,6 +33,7 @@ const AddItem = () => {
           itemname: itemName,
           itemprice: itemPrice,
           itemdescription: itemDescription,
+          itemimageurl: downloadURL
         }),
       });
 
@@ -35,7 +44,6 @@ const AddItem = () => {
       const result = await response.json();
       console.log(result);
 
-      // Optionally, reset form fields after successful submission
       setItemName("");
       setItemPrice("");
       setItemDescription("");
@@ -44,6 +52,10 @@ const AddItem = () => {
       console.error("Error adding item:", error);
     }
   };
+
+  const handleImageUpload = (e) => {
+    setImage(e.target.files[0])
+  }
 
   return (
     <div className="flex items-center justify-center flex-col">
@@ -84,6 +96,23 @@ const AddItem = () => {
             onChange={(e) => setItemDescription(e.target.value)}
             className="mt-3 border-solid border-2 border-black p-2 rounded"
           />
+        </div>
+        <div className="flex flex-col mt-2">
+          <label htmlFor="itemDesc">Item Image: </label>
+          <input
+            type="file"
+            placeholder="Item Description"
+            name="itemimage"
+            onChange={handleImageUpload}
+            className="mt-3 border-solid border-2 border-black p-2 rounded"
+          />
+          {
+            imageUrl && (
+              <div className="mt-3">
+                <img src={imageUrl} alt="Uploaded" className="max-w-xs" />
+              </div>
+            )
+          }
         </div>
         <div className="mt-3 w-full border text-center rounded">
           <button type="submit" className="p-2">
