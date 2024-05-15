@@ -16,6 +16,9 @@ const ItemSchema = mongoose.Schema({
     itemimageurl:{
         type: String,
         required: true
+    },
+    itemavailable:{
+        type: Boolean
     }
 })
 

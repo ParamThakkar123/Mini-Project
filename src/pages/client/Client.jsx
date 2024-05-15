@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const Client = () => {
   const [items, setItems] = useState([]);
+  const [notification, setNotification] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +21,22 @@ const Client = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const socket = io("http://localhost:8000", {transports: ["websocket"]});
+
+    socket.on("connection", () => {
+      console.log("Connected to socket io");
+    });
+
+    socket.on('orderReady', (userId) => {
+        setNotification('Your order is ready!');
+    });
+
+    return () => {
+        socket.off('orderReady');
+    };
+}, []);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {items.map((item) => (
@@ -31,6 +49,8 @@ const Client = () => {
           </div>
         </Link>
       ))}
+
+      {notification && <p>{notification}</p>}
     </div>
   );
 };

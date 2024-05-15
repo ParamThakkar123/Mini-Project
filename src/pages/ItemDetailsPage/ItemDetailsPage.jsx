@@ -24,8 +24,22 @@ const ItemDetailsPage = () => {
         setQuantity(e.target.value);
     }
 
-    const handleOrderPlacement = () => {
+    const handleOrderPlacement = async () => {
+        try{
+            const response = await fetch('http://localhost:5000/placeOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({itemId: item._id, quantity})
+            })
 
+            const data = await response.json();
+            alert(data.message)
+        }catch(error){
+            console.error("Error placing order", order)
+            alert('Failed to place order!')
+        }
     }
 
     if (!item) {
