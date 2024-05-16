@@ -42,10 +42,8 @@ const Client = () => {
     const existingItem = cart.find(cartItem => cartItem._id === item._id);
     if (existingItem) {
       setCart(cart.map(cartItem => cartItem._id === item._id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem));
-      console.log(cart)
     } else {
       setCart([...cart, { ...item, quantity: 1 }]);
-      console.log(cart)
     }
   };
 
@@ -92,7 +90,7 @@ const Client = () => {
         </div>
       ))}
 
-      {notification && <p>{notification}</p>}
+      {notification && <p className="bg-green-200 text-green-800 p-2 rounded-md my-4">{notification}</p>}
 
       {/* Display Cart Contents */}
       <div className="bg-white rounded-lg shadow-md p-4">
@@ -100,7 +98,7 @@ const Client = () => {
           {cart.map((cartItem) => (
             <div key={cartItem._id} className="flex justify-between items-center mb-2">
             <p>{cartItem.itemname} x {cartItem.quantity}</p>
-            <p>${cartItem.itemprice * cartItem.quantity}</p>
+            <p>Rs.{cartItem.itemprice * cartItem.quantity}</p>
           </div>
         ))}
         <p className="font-bold">Total Price: ${totalPrice}</p>

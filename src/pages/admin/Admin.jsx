@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import { Link } from 'react-router-dom';
 
 const Admin = () => {
   const [pendingOrders, setPendingOrders] = useState([]);
@@ -35,14 +36,19 @@ const Admin = () => {
   };
 
   return (
-    <div>
-      <h2>Pending Orders</h2>
+    <div className="max-w-lg mx-auto mt-10 p-4 bg-white rounded shadow-lg">
+      <h2 className="text-2xl font-bold mb-4">Pending Orders</h2>
+      <button>
+        <Link to='/addItem'>
+          Add items to the list
+        </Link>
+      </button>
       <ul>
         {pendingOrders.map((order, index) => (
-          <li key={index}>
-            <p>Item: {order.itemname}</p>
-            <p>Quantity: {order.quantity}</p>
-            <button onClick={() => handleDelete(order._id)}>Done</button>
+          <li key={index} className="border-b border-gray-200 py-2">
+            <p className="text-lg">Item: {order.itemname}</p>
+            <p className="text-sm text-gray-600">Quantity: {order.quantity}</p>
+            <button onClick={() => handleDelete(order._id)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded mt-2">Done</button>
           </li>
         ))}
       </ul>

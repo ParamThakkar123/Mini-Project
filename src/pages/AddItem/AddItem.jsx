@@ -58,67 +58,70 @@ const AddItem = () => {
   }
 
   return (
-    <div className="flex items-center justify-center flex-col">
-      <h1 className="text-xl mt-10 tracking-wide">Add Items to your Menu</h1>
+    <div className="flex items-center justify-center flex-col min-h-screen bg-gray-100">
+      <h1 className="text-3xl mt-10 tracking-wide font-bold">Add Items to your Menu</h1>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col flex-wrap mt-20 border rounded p-14"
+        className="flex flex-col flex-wrap mt-20 bg-white p-14 rounded shadow-md"
       >
-        <div className="flex flex-col">
-          <label htmlFor="itemName">Item Name: </label>
+        <div className="flex flex-col mb-4">
+          <label htmlFor="itemName" className="text-lg">Item Name: </label>
           <input
             type="text"
             placeholder="Item Name"
             name="itemname"
             value={itemName}
             onChange={(e) => setItemName(e.target.value)}
-            className="mt-3 border-solid border-2 border-black p-2 rounded"
+            className="mt-3 border-solid border-2 border-gray-300 p-2 rounded w-full"
           />
         </div>
-        <div className="flex flex-col mt-2">
-          <label htmlFor="itemPrice">Item Price: </label>
+        <div className="flex flex-col mb-4">
+          <label htmlFor="itemPrice" className="text-lg">Item Price: </label>
           <input
             type="text"
             placeholder="Item Price"
             name="itemprice"
             value={itemPrice}
             onChange={(e) => setItemPrice(e.target.value)}
-            className="mt-3 border-solid border-2 border-black p-2 rounded"
+            className="mt-3 border-solid border-2 border-gray-300 p-2 rounded w-full"
           />
         </div>
-        <div className="flex flex-col mt-2">
-          <label htmlFor="itemDesc">Item Description: </label>
+        <div className="flex flex-col mb-4">
+          <label htmlFor="itemDesc" className="text-lg">Item Description: </label>
           <input
             type="text"
             placeholder="Item Description"
             name="itemdescription"
             value={itemDescription}
             onChange={(e) => setItemDescription(e.target.value)}
-            className="mt-3 border-solid border-2 border-black p-2 rounded"
+            className="mt-3 border-solid border-2 border-gray-300 p-2 rounded w-full"
           />
         </div>
-        <div className="flex flex-col mt-2">
-          <label htmlFor="itemDesc">Item Image: </label>
+        <div className="flex flex-col mb-4">
+          <label htmlFor="itemDesc" className="text-lg">Item Image: </label>
           <input
             type="file"
             placeholder="Item Description"
             name="itemimage"
             onChange={handleImageUpload}
-            className="mt-3 border-solid border-2 border-black p-2 rounded"
+            className="mt-3 border-solid border-2 border-gray-300 p-2 rounded w-full"
           />
           {
             imageUrl && (
               <div className="mt-3">
-                <img src={imageUrl} alt="Uploaded" className="max-w-xs" />
+                <img src={imageUrl} alt="Uploaded" className="max-w-xs rounded" />
               </div>
             )
           }
         </div>
-        <div className="mt-3 w-full border text-center rounded">
-          <button type="submit" className="p-2">
+        <div className="mt-3 w-full">
+          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Add Item
           </button>
         </div>
+        {error && (
+          <div className="text-red-500 text-lg mt-3">{error}</div>
+        )}
       </form>
     </div>
   );
