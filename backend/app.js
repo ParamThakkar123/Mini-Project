@@ -38,23 +38,28 @@ app.get('/getItems', async(req, res) => {
 })
 
 app.post('/placeOrder', async (req, res) => {
-    const {itemId, quantity} = req.body;
+    const orders = req.body.orders;
 
-    try{
-        const item = await ItemModel.findById(itemId);
+    try {
+        const newOrders = await Promise.all(orders.map(async (order) => {
+            const { itemId, quantity } = order;
+            const item = await ItemModel.findById(itemId);
 
-        const newOrder = new OrderModel({
-            itemname: item.itemname,
-            quantity
-        });
+            const newOrder = new OrderModel({
+                itemname: item.itemname,
+                quantity
+            });
 
-        const savedOrder = await newOrder.save();
-        res.status(200).json({ message: 'Order placed successfully. Waiting for admin approval.' });
-    }catch(error){
+            return newOrder.save();
+        }));
+
+        res.status(200).json({ message: 'Orders placed successfully. Waiting for admin approval.' });
+    } catch (error) {
         console.error("Error Placing Order", error)
-        res.status(500).json({message: 'Failed to place order. Please try again later'})
+        res.status(500).json({ message: 'Failed to place orders. Please try again later' })
     }
 })
+
 
 app.get('/pendingOrders', async (req, res) => {
     try{
